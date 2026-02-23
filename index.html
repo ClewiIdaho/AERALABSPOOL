@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>AERA LABS POOL - Futuristic Billiards</title>
+  <meta name="description" content="A futuristic 8-ball pool game with advanced physics, neon cyberpunk visuals, and immersive music.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎱</text></svg>">
+</head>
+<body>
+
+  <!-- Game Canvas -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- Main Menu -->
+  <div id="mainMenu" class="visible">
+    <div class="menu-container">
+      <div class="menu-title">AERA POOL</div>
+      <div class="menu-subtitle">FUTURISTIC BILLIARDS</div>
+      <div class="menu-divider"></div>
+
+      <div class="player-inputs">
+        <div class="player-input-group">
+          <label>PLAYER 1</label>
+          <input type="text" id="p1Input" placeholder="Player 1" maxlength="12" autocomplete="off">
+        </div>
+        <div class="player-input-group">
+          <label>PLAYER 2</label>
+          <input type="text" id="p2Input" placeholder="Player 2" maxlength="12" autocomplete="off">
+        </div>
+      </div>
+
+      <button id="startBtn" class="start-btn">BREAK</button>
+
+      <div class="menu-footer">
+        ADVANCED PHYSICS ENGINE &bull; 8-BALL RULES<br>
+        CLICK &amp; DRAG TO AIM AND SHOOT
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <!-- Player 1 Panel -->
+      <div class="player-panel">
+        <div class="indicator" id="p1Indicator"></div>
+        <div class="player-info">
+          <div class="player-name" id="p1Name">PLAYER 1</div>
+          <div class="player-type" id="p1Type">OPEN</div>
+        </div>
+        <div class="player-score" id="p1Score">0</div>
+        <div class="pocketed-balls" id="p1Pocketed"></div>
+      </div>
+
+      <!-- Center Info -->
+      <div class="center-info">
+        <div class="game-title-small">AERA POOL</div>
+        <div id="stateIndicator"></div>
+      </div>
+
+      <!-- Player 2 Panel -->
+      <div class="player-panel">
+        <div class="pocketed-balls" id="p2Pocketed"></div>
+        <div class="player-score" id="p2Score">0</div>
+        <div class="player-info" style="text-align: right;">
+          <div class="player-name" id="p2Name">PLAYER 2</div>
+          <div class="player-type" id="p2Type">OPEN</div>
+        </div>
+        <div class="indicator" id="p2Indicator"></div>
+      </div>
+    </div>
+
+    <!-- Turn Message -->
+    <div id="turnMessage"></div>
+    <!-- Foul Message -->
+    <div id="foulMessage"></div>
+
+    <!-- Spin Control -->
+    <div class="spin-control">
+      <canvas id="spinCanvas" width="80" height="80"></canvas>
+      <button class="reset-spin-btn" id="resetSpinBtn">RESET</button>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <!-- Music Player -->
+      <div class="music-player">
+        <button class="music-btn" id="musicPrev" title="Previous track">&#9664;</button>
+        <button class="music-btn" id="musicToggle" title="Play/Pause">&#9208;</button>
+        <button class="music-btn" id="musicNext" title="Next track">&#9654;</button>
+        <div class="music-info">
+          <div class="music-label">NOW PLAYING</div>
+          <div id="musicTrack">---</div>
+        </div>
+      </div>
+
+      <!-- Volume Controls -->
+      <div class="volume-controls">
+        <div class="volume-group">
+          <span class="volume-label">MUSIC</span>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.4">
+        </div>
+        <div class="volume-group">
+          <span class="volume-label">SFX</span>
+          <input type="range" id="sfxVolumeSlider" min="0" max="1" step="0.05" value="0.5">
+        </div>
+      </div>
+
+      <!-- Help -->
+      <button class="help-btn" id="helpToggle" title="Help">?</button>
+    </div>
+
+    <!-- Help Panel -->
+    <div id="helpPanel">
+      <div class="help-title">HOW TO PLAY</div>
+      <div class="help-item">
+        <span class="help-key">AIM:</span>
+        <span class="help-desc"> Move mouse over table to aim</span>
+      </div>
+      <div class="help-item">
+        <span class="help-key">SHOOT:</span>
+        <span class="help-desc"> Click and drag away from cue ball, then release. Drag distance = power</span>
+      </div>
+      <div class="help-item">
+        <span class="help-key">SPIN:</span>
+        <span class="help-desc"> Click and drag on the spin control (bottom left) to apply english/topspin/backspin</span>
+      </div>
+      <div class="help-item">
+        <span class="help-key">BALL IN HAND:</span>
+        <span class="help-desc"> After a foul, click on the table to place the cue ball, then click to confirm</span>
+      </div>
+      <div class="menu-divider" style="margin: 12px 0;"></div>
+      <div class="help-item">
+        <span class="help-key">RULES:</span>
+        <span class="help-desc"> Standard 8-ball. Pocket all your balls (solids/stripes) then sink the 8-ball to win. Scratching or hitting the wrong ball first is a foul.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over Panel -->
+  <div id="gameOverPanel">
+    <div class="game-over-content">
+      <div id="gameOverText">WINNER</div>
+      <div id="gameOverReason"></div>
+      <button class="new-game-btn" id="newGameBtn">NEW GAME</button>
+    </div>
+  </div>
+
+  <!-- FPS Display -->
+  <div id="fpsDisplay"></div>
+
+  <!-- Scripts (order matters) -->
+  <script src="js/vector.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
