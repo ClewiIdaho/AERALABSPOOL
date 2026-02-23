@@ -293,10 +293,9 @@ const Renderer = (() => {
 
       const dotR = 2;
 
-      // Top and bottom rail diamonds
-      for (let i = 1; i < 8; i++) {
-        if (i === 4) continue; // Skip center (side pocket)
-        const dx = x + (w / 8) * i;
+      // Top and bottom rail diamonds (short rails - no side pocket, 3 evenly spaced)
+      for (let i = 1; i <= 3; i++) {
+        const dx = x + (w / 4) * i;
 
         // Top rail
         ctx.beginPath();
@@ -308,9 +307,10 @@ const Renderer = (() => {
         ctx.fill();
       }
 
-      // Left and right rail diamonds
-      for (let i = 1; i < 4; i++) {
-        const dy = y + (h / 4) * i;
+      // Left and right rail diamonds (long rails - skip center for side pocket)
+      for (let i = 1; i < 8; i++) {
+        if (i === 4) continue; // Skip center (side pocket)
+        const dy = y + (h / 8) * i;
 
         // Left rail
         ctx.beginPath();

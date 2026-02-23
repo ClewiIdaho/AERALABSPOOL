@@ -108,12 +108,12 @@ const Physics = (() => {
       const inset = 0.02; // pocket inset from rail
 
       return [
-        { pos: new Vec2(inset, inset), radius: cr, id: 0 },                    // top-left
-        { pos: new Vec2(w / 2, -0.005), radius: sr, id: 1 },                   // top-center
-        { pos: new Vec2(w - inset, inset), radius: cr, id: 2 },                // top-right
-        { pos: new Vec2(inset, l - inset), radius: cr, id: 3 },                // bottom-left
-        { pos: new Vec2(w / 2, l + 0.005), radius: sr, id: 4 },               // bottom-center
-        { pos: new Vec2(w - inset, l - inset), radius: cr, id: 5 }             // bottom-right
+        { pos: new Vec2(inset, inset), radius: cr, id: 0 },                    // top-left corner
+        { pos: new Vec2(w - inset, inset), radius: cr, id: 1 },                // top-right corner
+        { pos: new Vec2(-0.005, l / 2), radius: sr, id: 2 },                   // left side (middle)
+        { pos: new Vec2(w + 0.005, l / 2), radius: sr, id: 3 },               // right side (middle)
+        { pos: new Vec2(inset, l - inset), radius: cr, id: 4 },                // bottom-left corner
+        { pos: new Vec2(w - inset, l - inset), radius: cr, id: 5 }             // bottom-right corner
       ];
     }
 
@@ -124,18 +124,18 @@ const Physics = (() => {
       const p = 0.065; // pocket mouth width offset
 
       return [
-        // Top rail (left of center pocket)
-        { start: new Vec2(p, 0), end: new Vec2(w / 2 - p, 0), normal: new Vec2(0, 1) },
-        // Top rail (right of center pocket)
-        { start: new Vec2(w / 2 + p, 0), end: new Vec2(w - p, 0), normal: new Vec2(0, 1) },
-        // Bottom rail (left of center pocket)
-        { start: new Vec2(p, l), end: new Vec2(w / 2 - p, l), normal: new Vec2(0, -1) },
-        // Bottom rail (right of center pocket)
-        { start: new Vec2(w / 2 + p, l), end: new Vec2(w - p, l), normal: new Vec2(0, -1) },
-        // Left rail
-        { start: new Vec2(0, p), end: new Vec2(0, l - p), normal: new Vec2(1, 0) },
-        // Right rail
-        { start: new Vec2(w, p), end: new Vec2(w, l - p), normal: new Vec2(-1, 0) }
+        // Top rail (full, no side pocket on short rail)
+        { start: new Vec2(p, 0), end: new Vec2(w - p, 0), normal: new Vec2(0, 1) },
+        // Bottom rail (full, no side pocket on short rail)
+        { start: new Vec2(p, l), end: new Vec2(w - p, l), normal: new Vec2(0, -1) },
+        // Left rail (above side pocket)
+        { start: new Vec2(0, p), end: new Vec2(0, l / 2 - p), normal: new Vec2(1, 0) },
+        // Left rail (below side pocket)
+        { start: new Vec2(0, l / 2 + p), end: new Vec2(0, l - p), normal: new Vec2(1, 0) },
+        // Right rail (above side pocket)
+        { start: new Vec2(w, p), end: new Vec2(w, l / 2 - p), normal: new Vec2(-1, 0) },
+        // Right rail (below side pocket)
+        { start: new Vec2(w, l / 2 + p), end: new Vec2(w, l - p), normal: new Vec2(-1, 0) }
       ];
     }
   }
